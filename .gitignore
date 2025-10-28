@@ -1,3 +1,11 @@
 node_modules/
-*.png
 .DS_Store
+lighthouse-report.html
+
+# Exclude test screenshots but include PWA icons
+screenshot-*.png
+layout-*.png
+
+# Include PWA icons
+!icon-*.png
+!apple-touch-icon.png

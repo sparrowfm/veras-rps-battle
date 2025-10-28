@@ -11,21 +11,36 @@
     <meta name="keywords" content="rock paper scissors, web game, brutalist design, ChatGPT limitations, online game, free game, RPS battle">
     <meta name="author" content="Neel Ketkar">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="http://veras-rps-battle-1761624731.s3-website-us-east-1.amazonaws.com">
+    <link rel="canonical" href="https://d2m7mlcoklgntq.cloudfront.net">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- PWA Icons -->
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512x512.png">
+
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Vera's RPS">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://veras-rps-battle-1761624731.s3-website-us-east-1.amazonaws.com">
+    <meta property="og:url" content="https://d2m7mlcoklgntq.cloudfront.net">
     <meta property="og:title" content="Vera's Rock Paper Scissors Battle">
     <meta property="og:description" content="A brutalist web game where the computer actually plays fair. Built because ChatGPT can't commit to a choice before seeing yours.">
     <meta property="og:site_name" content="Vera's Rock Paper Scissors Battle">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:url" content="http://veras-rps-battle-1761624731.s3-website-us-east-1.amazonaws.com">
+    <meta name="twitter:url" content="https://d2m7mlcoklgntq.cloudfront.net">
     <meta name="twitter:title" content="Vera's Rock Paper Scissors Battle">
     <meta name="twitter:description" content="A brutalist web game where the computer actually plays fair. Try to beat the computer at Rock Paper Scissors!">
 
@@ -36,7 +51,7 @@
       "@type": "WebApplication",
       "name": "Vera's Rock Paper Scissors Battle",
       "description": "A brutalist web-based Rock Paper Scissors game where the computer randomly selects its choice before the player, ensuring fair gameplay. Features session and persistent scoring using localStorage.",
-      "url": "http://veras-rps-battle-1761624731.s3-website-us-east-1.amazonaws.com",
+      "url": "https://d2m7mlcoklgntq.cloudfront.net",
       "applicationCategory": "Game",
       "operatingSystem": "Web Browser",
       "offers": {
@@ -535,5 +550,20 @@
     <!-- Analytics -->
     <script data-goatcounter="https://sparrowfm.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered successfully:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>

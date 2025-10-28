@@ -5,7 +5,7 @@
 
 const puppeteer = require('puppeteer');
 
-const GAME_URL = 'http://veras-rps-battle-1761624731.s3-website-us-east-1.amazonaws.com';
+const GAME_URL = 'https://d2m7mlcoklgntq.cloudfront.net';
 
 // Viewport configurations
 const VIEWPORTS = {

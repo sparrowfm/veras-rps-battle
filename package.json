@@ -4,7 +4,9 @@
   "description": "A brutalist Rock Paper Scissors game where the computer actually plays fair",
   "main": "index.html",
   "scripts": {
-    "test": "node test-game.js"
+    "test": "node test-game.js",
+    "test:pwa": "node test-pwa.js",
+    "lighthouse": "node lighthouse-audit.js"
   },
   "keywords": [
     "rock-paper-scissors",
@@ -15,6 +17,8 @@
   "author": "Neel Ketkar",
   "license": "MIT",
   "devDependencies": {
+    "chrome-launcher": "^1.2.1",
+    "lighthouse": "^13.0.1",
     "puppeteer": "^22.0.0"
   }
 }
