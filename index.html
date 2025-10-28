@@ -226,6 +226,105 @@
             visibility: hidden;
         }
 
+        /* Install Banner */
+        .install-banner {
+            border: 5px solid #000;
+            padding: 15px;
+            margin: 15px 0;
+            background: #fff;
+            display: none;
+        }
+
+        .install-banner.show {
+            display: block;
+        }
+
+        .install-banner-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .install-banner-text {
+            flex: 1;
+        }
+
+        .install-banner h3 {
+            font-size: 1.1rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .install-banner p {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .install-banner-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .install-btn, .dismiss-btn {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            font-weight: 900;
+            padding: 12px 20px;
+            border: 4px solid #000;
+            background: #000;
+            color: #fff;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .install-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .dismiss-btn {
+            background: #fff;
+            color: #000;
+        }
+
+        .dismiss-btn:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .install-banner {
+                padding: 12px;
+                border: 4px solid #000;
+            }
+
+            .install-banner-content {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .install-banner h3 {
+                font-size: 0.9rem;
+            }
+
+            .install-banner p {
+                font-size: 0.75rem;
+            }
+
+            .install-banner-buttons {
+                flex-direction: column;
+            }
+
+            .install-btn, .dismiss-btn {
+                font-size: 0.8rem;
+                padding: 10px 15px;
+                border: 3px solid #000;
+            }
+        }
+
         footer {
             border-top: 6px solid #000;
             margin-top: 50px;
@@ -328,6 +427,20 @@
     <div class="container">
         <h1>VERA'S ROCK PAPER SCISSORS BATTLE</h1>
         <div class="tagline">BECAUSE CHATGPT CAN'T PLAY FAIR — THIS COMPUTER ACTUALLY GOES FIRST</div>
+
+        <!-- Install Banner -->
+        <div class="install-banner" id="installBanner">
+            <div class="install-banner-content">
+                <div class="install-banner-text">
+                    <h3>📱 INSTALL AS APP</h3>
+                    <p>ADD TO HOME SCREEN FOR OFFLINE PLAY & FASTER LOADING</p>
+                </div>
+                <div class="install-banner-buttons">
+                    <button class="install-btn" id="installBtn">INSTALL</button>
+                    <button class="dismiss-btn" id="dismissBtn">NOT NOW</button>
+                </div>
+            </div>
+        </div>
 
         <div class="game-buttons">
             <button onclick="play('rock')">✊ ROCK</button>
@@ -540,6 +653,80 @@
 
         // Initialize on load
         updateScores();
+
+        // PWA Install Banner Logic
+        let deferredPrompt;
+        const installBanner = document.getElementById('installBanner');
+        const installBtn = document.getElementById('installBtn');
+        const dismissBtn = document.getElementById('dismissBtn');
+
+        // Check if app is already installed or running in standalone mode
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                          || window.navigator.standalone
+                          || document.referrer.includes('android-app://');
+
+        // Check if user previously dismissed the banner
+        const bannerDismissed = localStorage.getItem('installBannerDismissed');
+
+        // Capture the beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Stash the event so it can be triggered later
+            deferredPrompt = e;
+
+            // Show install banner if not already installed and not dismissed
+            if (!isStandalone && !bannerDismissed) {
+                installBanner.classList.add('show');
+            }
+        });
+
+        // Install button click handler
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) {
+                // Fallback for iOS and browsers that don't support beforeinstallprompt
+                alert('To install:\n\niOS: Tap Share → Add to Home Screen\nAndroid: Tap Menu → Install app\nDesktop: Look for install icon in address bar');
+                return;
+            }
+
+            // Show the install prompt
+            deferredPrompt.prompt();
+
+            // Wait for the user to respond to the prompt
+            const { outcome } = await deferredPrompt.userChoice;
+
+            console.log(`User response: ${outcome}`);
+
+            // Hide the banner regardless of outcome
+            installBanner.classList.remove('show');
+
+            // Clear the deferredPrompt
+            deferredPrompt = null;
+        });
+
+        // Dismiss button click handler
+        dismissBtn.addEventListener('click', () => {
+            installBanner.classList.remove('show');
+            // Remember dismissal for 7 days
+            localStorage.setItem('installBannerDismissed', Date.now() + (7 * 24 * 60 * 60 * 1000));
+        });
+
+        // Check if dismissal has expired
+        if (bannerDismissed && Date.now() > parseInt(bannerDismissed)) {
+            localStorage.removeItem('installBannerDismissed');
+        }
+
+        // For iOS Safari (doesn't support beforeinstallprompt)
+        // Show banner after a few seconds if not installed and not dismissed
+        if (!isStandalone && !bannerDismissed && !deferredPrompt) {
+            // Detect iOS
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            if (isIOS) {
+                setTimeout(() => {
+                    installBanner.classList.add('show');
+                }, 3000); // Show after 3 seconds
+            }
+        }
     </script>
 
     <footer>
