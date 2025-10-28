@@ -220,30 +220,47 @@
             padding: 15px 30px;
             font-size: 1rem;
             margin-top: 10px;
+            display: block;
+            width: 100%;
         }
 
         .hidden {
             visibility: hidden;
         }
 
-        /* Install Banner */
+        /* Install Banner - Sticky Bottom with Slide-Up Animation */
         .install-banner {
-            border: 5px solid #000;
-            padding: 15px;
-            margin: 15px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-top: 6px solid #000;
+            padding: 20px;
             background: #fff;
-            display: none;
+            box-shadow: 0 -4px 0 #000;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
         }
 
         .install-banner.show {
-            display: block;
+            transform: translateY(0);
+            animation: bounce 0.6s ease-out;
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(100%); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
         }
 
         .install-banner-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .install-banner-text {
@@ -251,32 +268,36 @@
         }
 
         .install-banner h3 {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             font-weight: 900;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .install-banner p {
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .install-banner-buttons {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         .install-btn, .dismiss-btn {
             font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 900;
-            padding: 12px 20px;
-            border: 4px solid #000;
+            padding: 15px 30px;
+            border: 5px solid #000;
             background: #000;
             color: #fff;
             cursor: pointer;
             text-transform: uppercase;
+            transition: none;
+            letter-spacing: 1px;
         }
 
         .install-btn:hover {
@@ -284,9 +305,14 @@
             color: #000;
         }
 
+        .install-btn:active {
+            transform: translate(2px, 2px);
+        }
+
         .dismiss-btn {
             background: #fff;
             color: #000;
+            border: 5px solid #000;
         }
 
         .dismiss-btn:hover {
@@ -294,34 +320,43 @@
             color: #fff;
         }
 
+        .dismiss-btn:active {
+            transform: translate(2px, 2px);
+        }
+
         @media (max-width: 768px) {
             .install-banner {
-                padding: 12px;
-                border: 4px solid #000;
+                padding: 15px;
+                border-top: 5px solid #000;
             }
 
             .install-banner-content {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 10px;
+                gap: 12px;
             }
 
             .install-banner h3 {
-                font-size: 0.9rem;
+                font-size: 1rem;
+                margin-bottom: 5px;
+                text-align: center;
             }
 
             .install-banner p {
-                font-size: 0.75rem;
+                font-size: 0.8rem;
+                text-align: center;
             }
 
             .install-banner-buttons {
-                flex-direction: column;
+                flex-direction: row;
+                gap: 8px;
             }
 
             .install-btn, .dismiss-btn {
-                font-size: 0.8rem;
-                padding: 10px 15px;
-                border: 3px solid #000;
+                font-size: 0.85rem;
+                padding: 12px 20px;
+                border: 4px solid #000;
+                flex: 1;
             }
         }
 
@@ -433,7 +468,7 @@
             <div class="install-banner-content">
                 <div class="install-banner-text">
                     <h3>📱 INSTALL AS APP</h3>
-                    <p>ADD TO HOME SCREEN FOR OFFLINE PLAY & FASTER LOADING</p>
+                    <p>ADD TO HOME SCREEN FOR OFFLINE PLAY</p>
                 </div>
                 <div class="install-banner-buttons">
                     <button class="install-btn" id="installBtn">INSTALL</button>
@@ -665,8 +700,30 @@
                           || window.navigator.standalone
                           || document.referrer.includes('android-app://');
 
-        // Check if user previously dismissed the banner
-        const bannerDismissed = localStorage.getItem('installBannerDismissed');
+        // Session counting logic
+        function incrementSessionCount() {
+            let sessionCount = parseInt(localStorage.getItem('bannerSessionCount') || '0');
+            sessionCount++;
+            localStorage.setItem('bannerSessionCount', sessionCount.toString());
+            return sessionCount;
+        }
+
+        function resetSessionCount() {
+            localStorage.setItem('bannerSessionCount', '0');
+        }
+
+        // Check dismissal status
+        const bannerDismissed = localStorage.getItem('installBannerDismissed') === 'true';
+        const currentSessionCount = incrementSessionCount();
+
+        // Reset dismissal after 10 sessions
+        if (bannerDismissed && currentSessionCount >= 10) {
+            localStorage.removeItem('installBannerDismissed');
+            resetSessionCount();
+        }
+
+        // Should we show the banner?
+        const shouldShowBanner = !isStandalone && (!bannerDismissed || currentSessionCount >= 10);
 
         // Capture the beforeinstallprompt event
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -675,9 +732,11 @@
             // Stash the event so it can be triggered later
             deferredPrompt = e;
 
-            // Show install banner if not already installed and not dismissed
-            if (!isStandalone && !bannerDismissed) {
-                installBanner.classList.add('show');
+            // Show install banner if conditions are met
+            if (shouldShowBanner) {
+                setTimeout(() => {
+                    installBanner.classList.add('show');
+                }, 1000); // Slight delay for dramatic effect
             }
         });
 
@@ -700,6 +759,12 @@
             // Hide the banner regardless of outcome
             installBanner.classList.remove('show');
 
+            // If user accepted, mark as dismissed
+            if (outcome === 'accepted') {
+                localStorage.setItem('installBannerDismissed', 'true');
+                resetSessionCount();
+            }
+
             // Clear the deferredPrompt
             deferredPrompt = null;
         });
@@ -707,24 +772,24 @@
         // Dismiss button click handler
         dismissBtn.addEventListener('click', () => {
             installBanner.classList.remove('show');
-            // Remember dismissal for 7 days
-            localStorage.setItem('installBannerDismissed', Date.now() + (7 * 24 * 60 * 60 * 1000));
+            // Mark as dismissed and reset session count
+            localStorage.setItem('installBannerDismissed', 'true');
+            resetSessionCount();
         });
 
-        // Check if dismissal has expired
-        if (bannerDismissed && Date.now() > parseInt(bannerDismissed)) {
-            localStorage.removeItem('installBannerDismissed');
-        }
-
-        // For iOS Safari (doesn't support beforeinstallprompt)
-        // Show banner after a few seconds if not installed and not dismissed
-        if (!isStandalone && !bannerDismissed && !deferredPrompt) {
-            // Detect iOS
+        // For iOS Safari and other browsers that don't support beforeinstallprompt
+        // Show banner after a delay if conditions are met
+        if (shouldShowBanner) {
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            if (isIOS) {
+            const isSupported = isIOS || /Android/.test(navigator.userAgent) || /Chrome/.test(navigator.userAgent);
+
+            if (isSupported && !deferredPrompt) {
                 setTimeout(() => {
-                    installBanner.classList.add('show');
-                }, 3000); // Show after 3 seconds
+                    // Only show if beforeinstallprompt hasn't fired
+                    if (!installBanner.classList.contains('show')) {
+                        installBanner.classList.add('show');
+                    }
+                }, 2000); // Show after 2 seconds
             }
         }
     </script>
