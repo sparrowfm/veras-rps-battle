@@ -1,0 +1,168 @@
+/**
+ * Theme System for Vera's Rock Paper Scissors Battle
+ * Three themes: Brutalist, Y2K Cyber, Neon Dark
+ */
+
+/* ========== CSS VARIABLES ========== */
+
+/* BRUTALIST THEME (Default) */
+body[data-theme="brutalist"] {
+    --bg-primary: #fff;
+    --bg-secondary: #000;
+    --text-primary: #000;
+    --text-secondary: #fff;
+    --border-color: #000;
+    --border-width: 5px;
+    --border-radius: 0;
+    --button-bg: #fff;
+    --button-text: #000;
+    --button-bg-hover: #000;
+    --button-text-hover: #fff;
+    --shadow: 0 -4px 0 #000;
+    --font-family: 'Courier New', monospace;
+    --gradient: none;
+}
+
+/* Y2K CYBER THEME */
+body[data-theme="y2k"] {
+    --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --bg-secondary: rgba(255, 255, 255, 0.95);
+    --text-primary: #2d3748;
+    --text-secondary: #5a67d8;
+    --border-color: rgba(255, 255, 255, 0.3);
+    --border-width: 3px;
+    --border-radius: 20px;
+    --button-bg: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --button-text: #fff;
+    --button-bg-hover: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --button-text-hover: #fff;
+    --shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* NEON DARK THEME */
+body[data-theme="neon"] {
+    --bg-primary: #0f0f23;
+    --bg-secondary: #1a1a2e;
+    --text-primary: #00ff9f;
+    --text-secondary: #ff00ff;
+    --border-color: #00ff9f;
+    --border-width: 2px;
+    --border-radius: 10px;
+    --button-bg: #1a1a2e;
+    --button-text: #00ff9f;
+    --button-bg-hover: #00ff9f;
+    --button-text-hover: #0f0f23;
+    --shadow: 0 0 20px rgba(0, 255, 159, 0.5);
+    --font-family: 'Courier New', monospace;
+    --gradient: none;
+}
+
+/* ========== THEME-SPECIFIC STYLES ========== */
+
+/* Y2K theme specific */
+body[data-theme="y2k"] {
+    background: var(--gradient);
+    background-attachment: fixed;
+}
+
+body[data-theme="y2k"] h1 {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+body[data-theme="y2k"] .tagline {
+    background: rgba(255, 255, 255, 0.9);
+    color: #667eea;
+    backdrop-filter: blur(10px);
+}
+
+body[data-theme="y2k"] button {
+    background: var(--button-bg);
+    border: none;
+    color: var(--button-text);
+    box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+    transition: all 0.3s ease;
+}
+
+body[data-theme="y2k"] button:hover {
+    background: var(--button-bg-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+}
+
+body[data-theme="y2k"] .choice-box,
+body[data-theme="y2k"] .result,
+body[data-theme="y2k"] .score-box {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Neon theme specific */
+body[data-theme="neon"] {
+    background: var(--bg-primary);
+}
+
+body[data-theme="neon"] h1 {
+    color: var(--text-primary);
+    text-shadow: 0 0 10px var(--text-primary),
+                 0 0 20px var(--text-primary),
+                 0 0 30px var(--text-primary);
+    animation: neonGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes neonGlow {
+    from {
+        text-shadow: 0 0 10px var(--text-primary),
+                     0 0 20px var(--text-primary),
+                     0 0 30px var(--text-primary);
+    }
+    to {
+        text-shadow: 0 0 20px var(--text-primary),
+                     0 0 30px var(--text-primary),
+                     0 0 40px var(--text-primary),
+                     0 0 50px var(--text-primary);
+    }
+}
+
+body[data-theme="neon"] .tagline {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border-color: var(--text-secondary);
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+}
+
+body[data-theme="neon"] button {
+    background: var(--button-bg);
+    border-color: var(--border-color);
+    color: var(--button-text);
+    box-shadow: 0 0 15px rgba(0, 255, 159, 0.3);
+    transition: all 0.3s ease;
+}
+
+body[data-theme="neon"] button:hover {
+    background: var(--button-bg-hover);
+    color: var(--button-text-hover);
+    box-shadow: 0 0 25px rgba(0, 255, 159, 0.8);
+}
+
+body[data-theme="neon"] .choice-box,
+body[data-theme="neon"] .result,
+body[data-theme="neon"] .score-box {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    box-shadow: 0 0 15px rgba(0, 255, 159, 0.2);
+}
+
+body[data-theme="neon"] .choice-icon {
+    filter: drop-shadow(0 0 10px rgba(0, 255, 159, 0.5));
+}

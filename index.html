@@ -77,22 +77,173 @@
             box-sizing: border-box;
         }
 
+        /* CSS Variables for Theme System */
+        body[data-theme="brutalist"] {
+            --bg-color: #fff;
+            --text-color: #000;
+            --border-color: #000;
+            --button-bg: #fff;
+            --button-text: #000;
+            --button-hover-bg: #000;
+            --button-hover-text: #fff;
+            --accent-bg: #000;
+            --accent-text: #fff;
+            --border-width: 5px;
+            --border-radius: 0;
+            --box-shadow: none;
+        }
+
+        body[data-theme="y2k"] {
+            --bg-color: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --text-color: #000;
+            --border-color: #ff00ff;
+            --button-bg: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            --button-text: #fff;
+            --button-hover-bg: linear-gradient(135deg, #ff00ff 0%, #ff6ec7 100%);
+            --button-hover-text: #fff;
+            --accent-bg: linear-gradient(135deg, #ff00ff 0%, #ff6ec7 100%);
+            --accent-text: #fff;
+            --border-width: 3px;
+            --border-radius: 20px;
+            --box-shadow: 0 8px 20px rgba(255, 0, 255, 0.3);
+        }
+
+        body[data-theme="neon"] {
+            --bg-color: #0f0f23;
+            --text-color: #00ff9f;
+            --border-color: #00ff9f;
+            --button-bg: #1a1a3e;
+            --button-text: #00ff9f;
+            --button-hover-bg: #00ff9f;
+            --button-hover-text: #0f0f23;
+            --accent-bg: #ff00ff;
+            --accent-text: #0f0f23;
+            --border-width: 3px;
+            --border-radius: 10px;
+            --box-shadow: 0 0 20px rgba(0, 255, 159, 0.5);
+        }
+
         body {
             font-family: 'Courier New', monospace;
-            background: #fff;
-            color: #000;
+            background: var(--bg-color);
+            color: var(--text-color);
             padding: 20px;
             line-height: 1.6;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        body[data-theme="y2k"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        body[data-theme="neon"] {
+            background: #0f0f23;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            display: flex;
+            gap: 8px;
+        }
+
+        .theme-btn {
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            font-weight: 900;
+            padding: 10px 15px;
+            border: var(--border-width) solid var(--border-color);
+            background: var(--button-bg);
+            color: var(--button-text);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: all 0.2s ease;
+        }
+
+        body[data-theme="y2k"] .theme-btn {
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        body[data-theme="neon"] .theme-btn {
+            text-shadow: 0 0 10px var(--text-color);
+        }
+
+        .theme-btn:hover {
+            background: var(--button-hover-bg);
+            color: var(--button-hover-text);
+            transform: translateY(-2px);
+        }
+
+        body[data-theme="neon"] .theme-btn:hover {
+            box-shadow: 0 0 30px var(--border-color);
+        }
+
+        .theme-btn:active {
+            transform: translateY(1px);
+        }
+
+        .theme-btn.active {
+            background: var(--accent-bg);
+            color: var(--accent-text);
+        }
+
+        body[data-theme="y2k"] .theme-btn.active {
+            background: linear-gradient(135deg, #ff00ff 0%, #ff6ec7 100%);
+        }
+
+        body[data-theme="neon"] .theme-btn.active {
+            background: var(--accent-bg);
+            box-shadow: 0 0 30px var(--accent-bg);
+        }
+
+        @media (max-width: 768px) {
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                gap: 5px;
+            }
+
+            .theme-btn {
+                font-size: 0.6rem;
+                padding: 8px 10px;
+            }
         }
 
         h1 {
             font-size: 2.5rem;
             font-weight: 900;
-            border: 6px solid #000;
+            border: 6px solid var(--border-color);
             padding: 15px;
             margin-bottom: 8px;
             text-align: center;
             letter-spacing: 3px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        body[data-theme="y2k"] h1 {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+            backdrop-filter: blur(10px);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        body[data-theme="neon"] h1 {
+            text-shadow: 0 0 20px var(--text-color), 0 0 40px var(--text-color);
+            animation: neonPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { text-shadow: 0 0 20px var(--text-color), 0 0 40px var(--text-color); }
+            50% { text-shadow: 0 0 30px var(--text-color), 0 0 60px var(--text-color); }
         }
 
         .tagline {
@@ -101,10 +252,21 @@
             text-align: center;
             padding: 10px;
             margin-bottom: 15px;
-            border: 4px solid #000;
-            background: #000;
-            color: #fff;
+            border: 4px solid var(--border-color);
+            background: var(--accent-bg);
+            color: var(--accent-text);
             letter-spacing: 1px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        body[data-theme="y2k"] .tagline {
+            background: linear-gradient(135deg, #ff00ff 0%, #ff6ec7 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        body[data-theme="neon"] .tagline {
+            text-shadow: 0 0 10px var(--accent-text);
         }
 
         .container {
@@ -124,16 +286,38 @@
             font-size: 1.2rem;
             font-weight: 900;
             padding: 18px 25px;
-            border: 5px solid #000;
-            background: #fff;
+            border: var(--border-width) solid var(--border-color);
+            background: var(--button-bg);
+            color: var(--button-text);
             cursor: pointer;
-            transition: none;
+            transition: all 0.2s ease;
             text-transform: uppercase;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        body[data-theme="y2k"] button {
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        body[data-theme="neon"] button {
+            text-shadow: 0 0 10px var(--text-color);
         }
 
         button:hover {
-            background: #000;
-            color: #fff;
+            background: var(--button-hover-bg);
+            color: var(--button-hover-text);
+            transform: translateY(-2px);
+        }
+
+        body[data-theme="y2k"] button:hover {
+            background: linear-gradient(135deg, #ff00ff 0%, #ff6ec7 100%);
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        body[data-theme="neon"] button:hover {
+            box-shadow: 0 0 30px var(--border-color);
         }
 
         button:active {
@@ -149,9 +333,20 @@
 
         .choice-box {
             flex: 1;
-            border: 5px solid #000;
+            border: var(--border-width) solid var(--border-color);
             padding: 15px 10px;
             text-align: center;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        body[data-theme="y2k"] .choice-box {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        body[data-theme="neon"] .choice-box {
+            background: rgba(26, 26, 62, 0.5);
         }
 
         .choice-box h2 {
@@ -165,8 +360,12 @@
             margin: 10px 0;
         }
 
+        body[data-theme="neon"] .choice-icon {
+            filter: drop-shadow(0 0 10px var(--text-color));
+        }
+
         .result {
-            border: 6px solid #000;
+            border: 6px solid var(--border-color);
             padding: 15px;
             text-align: center;
             margin: 15px 0;
@@ -174,12 +373,27 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        body[data-theme="y2k"] .result {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        body[data-theme="neon"] .result {
+            background: rgba(26, 26, 62, 0.5);
         }
 
         .result h2 {
             font-size: 1.8rem;
             margin-bottom: 5px;
             letter-spacing: 2px;
+        }
+
+        body[data-theme="neon"] .result h2 {
+            text-shadow: 0 0 15px var(--text-color);
         }
 
         .result p {
@@ -195,15 +409,26 @@
         }
 
         .score-box {
-            border: 6px solid #000;
+            border: 6px solid var(--border-color);
             padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        body[data-theme="y2k"] .score-box {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        body[data-theme="neon"] .score-box {
+            background: rgba(26, 26, 62, 0.5);
         }
 
         .score-box h3 {
             font-size: 1.3rem;
             margin-bottom: 15px;
             letter-spacing: 2px;
-            border-bottom: 4px solid #000;
+            border-bottom: 4px solid var(--border-color);
             padding-bottom: 10px;
         }
 
@@ -228,6 +453,140 @@
             visibility: hidden;
         }
 
+        /* iOS Install Overlay */
+        .ios-install-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .ios-install-overlay.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .ios-install-card {
+            background: #fff;
+            color: #000;
+            border: 6px solid #000;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+
+        body[data-theme="y2k"] .ios-install-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 255, 0.95) 100%);
+            border-radius: 20px;
+            border-color: #ff00ff;
+            box-shadow: 0 20px 60px rgba(255, 0, 255, 0.5);
+        }
+
+        body[data-theme="neon"] .ios-install-card {
+            background: #1a1a3e;
+            color: #00ff9f;
+            border-color: #00ff9f;
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(0, 255, 159, 0.5);
+        }
+
+        .ios-install-card h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        body[data-theme="neon"] .ios-install-card h3 {
+            text-shadow: 0 0 15px #00ff9f;
+        }
+
+        .ios-install-arrow {
+            font-size: 4rem;
+            margin: 20px 0;
+            animation: bounce-arrow 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce-arrow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .ios-install-steps {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .ios-install-step {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 15px 0;
+            padding: 10px;
+            border-left: 4px solid #000;
+            padding-left: 15px;
+        }
+
+        body[data-theme="y2k"] .ios-install-step {
+            border-left-color: #ff00ff;
+            background: rgba(255, 0, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        body[data-theme="neon"] .ios-install-step {
+            border-left-color: #ff00ff;
+            background: rgba(255, 0, 255, 0.1);
+        }
+
+        .ios-close-btn {
+            margin-top: 20px;
+            padding: 15px 40px;
+            font-size: 1rem;
+            background: #000;
+            color: #fff;
+            border: 4px solid #000;
+        }
+
+        body[data-theme="y2k"] .ios-close-btn {
+            background: linear-gradient(135deg, #ff00ff 0%, #ff6ec7 100%);
+            border-color: #ff00ff;
+        }
+
+        body[data-theme="neon"] .ios-close-btn {
+            background: #ff00ff;
+            color: #0f0f23;
+            border-color: #ff00ff;
+        }
+
+        .ios-close-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        body[data-theme="y2k"] .ios-close-btn:hover {
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            color: #fff;
+        }
+
+        body[data-theme="neon"] .ios-close-btn:hover {
+            background: #00ff9f;
+            color: #0f0f23;
+            box-shadow: 0 0 30px #00ff9f;
+        }
+
         /* Install Banner - Sticky Bottom with Slide-Up Animation */
         .install-banner {
             position: fixed;
@@ -235,12 +594,22 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            border-top: 6px solid #000;
+            border-top: 6px solid var(--border-color);
             padding: 20px;
-            background: #fff;
-            box-shadow: 0 -4px 0 #000;
+            background: var(--bg-color);
+            box-shadow: 0 -4px 0 var(--border-color);
             transform: translateY(100%);
             transition: transform 0.3s ease-out;
+        }
+
+        body[data-theme="y2k"] .install-banner {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        body[data-theme="neon"] .install-banner {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
         }
 
         .install-banner.show {
@@ -275,10 +644,23 @@
             text-transform: uppercase;
         }
 
+        body[data-theme="y2k"] .install-banner h3 {
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        body[data-theme="neon"] .install-banner h3 {
+            text-shadow: 0 0 15px var(--text-color);
+        }
+
         .install-banner p {
             font-size: 0.95rem;
             font-weight: 700;
             letter-spacing: 0.5px;
+        }
+
+        body[data-theme="y2k"] .install-banner p {
+            color: #fff;
         }
 
         .install-banner-buttons {
@@ -291,18 +673,41 @@
             font-size: 1rem;
             font-weight: 900;
             padding: 15px 30px;
-            border: 5px solid #000;
-            background: #000;
-            color: #fff;
+            border: var(--border-width) solid var(--border-color);
+            background: var(--accent-bg);
+            color: var(--accent-text);
             cursor: pointer;
             text-transform: uppercase;
-            transition: none;
+            transition: all 0.2s ease;
             letter-spacing: 1px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        body[data-theme="y2k"] .install-btn {
+            background: linear-gradient(135deg, #ff00ff 0%, #ff6ec7 100%);
+            color: #fff;
+        }
+
+        body[data-theme="neon"] .install-btn {
+            background: #ff00ff;
+            text-shadow: none;
         }
 
         .install-btn:hover {
-            background: #fff;
-            color: #000;
+            background: var(--button-bg);
+            color: var(--button-text);
+        }
+
+        body[data-theme="y2k"] .install-btn:hover {
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            transform: translateY(-3px);
+        }
+
+        body[data-theme="neon"] .install-btn:hover {
+            background: #00ff9f;
+            color: #0f0f23;
+            box-shadow: 0 0 30px #00ff9f;
         }
 
         .install-btn:active {
@@ -310,14 +715,34 @@
         }
 
         .dismiss-btn {
-            background: #fff;
+            background: var(--button-bg);
+            color: var(--button-text);
+        }
+
+        body[data-theme="y2k"] .dismiss-btn {
+            background: rgba(255, 255, 255, 0.9);
             color: #000;
-            border: 5px solid #000;
+        }
+
+        body[data-theme="neon"] .dismiss-btn {
+            background: #1a1a3e;
+            color: #00ff9f;
         }
 
         .dismiss-btn:hover {
-            background: #000;
+            background: var(--accent-bg);
+            color: var(--accent-text);
+        }
+
+        body[data-theme="y2k"] .dismiss-btn:hover {
+            background: linear-gradient(135deg, #ff00ff 0%, #ff6ec7 100%);
             color: #fff;
+        }
+
+        body[data-theme="neon"] .dismiss-btn:hover {
+            background: #ff00ff;
+            color: #0f0f23;
+            box-shadow: 0 0 30px #ff00ff;
         }
 
         .dismiss-btn:active {
@@ -327,7 +752,7 @@
         @media (max-width: 768px) {
             .install-banner {
                 padding: 15px;
-                border-top: 5px solid #000;
+                border-top: 5px solid var(--border-color);
             }
 
             .install-banner-content {
@@ -355,16 +780,38 @@
             .install-btn, .dismiss-btn {
                 font-size: 0.85rem;
                 padding: 12px 20px;
-                border: 4px solid #000;
+                border: 4px solid var(--border-color);
                 flex: 1;
+            }
+
+            .ios-install-card {
+                padding: 20px;
+            }
+
+            .ios-install-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .ios-install-step {
+                font-size: 0.9rem;
             }
         }
 
         footer {
-            border-top: 6px solid #000;
+            border-top: 6px solid var(--border-color);
             margin-top: 50px;
             padding: 30px 20px;
             text-align: center;
+        }
+
+        body[data-theme="y2k"] footer {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+        }
+
+        body[data-theme="neon"] footer {
+            background: rgba(26, 26, 62, 0.5);
         }
 
         footer p {
@@ -374,15 +821,15 @@
         }
 
         footer a {
-            color: #000;
+            color: var(--text-color);
             text-decoration: none;
-            border-bottom: 3px solid #000;
+            border-bottom: 3px solid var(--border-color);
             font-weight: 900;
         }
 
         footer a:hover {
-            background: #000;
-            color: #fff;
+            background: var(--accent-bg);
+            color: var(--accent-text);
         }
 
         @media (max-width: 768px) {
@@ -408,7 +855,7 @@
             button {
                 font-size: 1rem;
                 padding: 15px 20px;
-                border: 4px solid #000;
+                border: 4px solid var(--border-color);
             }
 
             .choice-display {
@@ -418,7 +865,7 @@
 
             .choice-box {
                 padding: 12px 8px;
-                border: 4px solid #000;
+                border: 4px solid var(--border-color);
             }
 
             .choice-box h2 {
@@ -435,7 +882,7 @@
                 padding: 12px;
                 margin: 12px 0;
                 min-height: 70px;
-                border: 5px solid #000;
+                border: 5px solid var(--border-color);
             }
 
             .result h2 {
@@ -458,7 +905,28 @@
         }
     </style>
 </head>
-<body>
+<body data-theme="brutalist">
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button class="theme-btn active" data-theme="brutalist">BRUTAL</button>
+        <button class="theme-btn" data-theme="y2k">Y2K</button>
+        <button class="theme-btn" data-theme="neon">NEON</button>
+    </div>
+
+    <!-- iOS Install Overlay -->
+    <div class="ios-install-overlay" id="iosInstallOverlay">
+        <div class="ios-install-card">
+            <h3>INSTALL TO HOME SCREEN</h3>
+            <div class="ios-install-arrow">⬆️</div>
+            <div class="ios-install-steps">
+                <div class="ios-install-step">1. TAP THE SHARE BUTTON ⬆️ AT THE BOTTOM</div>
+                <div class="ios-install-step">2. SCROLL DOWN AND TAP "ADD TO HOME SCREEN"</div>
+                <div class="ios-install-step">3. TAP "ADD" TO COMPLETE INSTALLATION</div>
+            </div>
+            <button class="ios-close-btn" onclick="closeIOSOverlay()">GOT IT</button>
+        </div>
+    </div>
+
     <div class="container">
         <h1>VERA'S ROCK PAPER SCISSORS BATTLE</h1>
         <div class="tagline">BECAUSE CHATGPT CAN'T PLAY FAIR — THIS COMPUTER ACTUALLY GOES FIRST</div>
@@ -537,6 +1005,36 @@
     </div>
 
     <script>
+        // Theme Management
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'brutalist';
+            setTheme(savedTheme);
+        }
+
+        function setTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+
+            // Update active state on buttons
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-theme') === theme) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Theme toggle event listeners
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const theme = btn.getAttribute('data-theme');
+                setTheme(theme);
+            });
+        });
+
+        // Initialize theme on load
+        initTheme();
+
         // Game state
         const choices = ['rock', 'paper', 'scissors'];
         const icons = {
@@ -689,6 +1187,18 @@
         // Initialize on load
         updateScores();
 
+        // iOS Install Overlay Functions
+        function showIOSOverlay() {
+            document.getElementById('iosInstallOverlay').classList.add('show');
+        }
+
+        function closeIOSOverlay() {
+            document.getElementById('iosInstallOverlay').classList.remove('show');
+            // Mark as dismissed
+            localStorage.setItem('installBannerDismissed', 'true');
+            resetSessionCount();
+        }
+
         // PWA Install Banner Logic
         let deferredPrompt;
         const installBanner = document.getElementById('installBanner');
@@ -725,6 +1235,9 @@
         // Should we show the banner?
         const shouldShowBanner = !isStandalone && (!bannerDismissed || currentSessionCount >= 10);
 
+        // Detect iOS
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
         // Capture the beforeinstallprompt event
         window.addEventListener('beforeinstallprompt', (e) => {
             // Prevent the mini-infobar from appearing on mobile
@@ -742,8 +1255,15 @@
 
         // Install button click handler
         installBtn.addEventListener('click', async () => {
+            if (isIOS) {
+                // Show iOS-specific overlay tutorial
+                installBanner.classList.remove('show');
+                showIOSOverlay();
+                return;
+            }
+
             if (!deferredPrompt) {
-                // Fallback for iOS and browsers that don't support beforeinstallprompt
+                // Fallback for browsers that don't support beforeinstallprompt
                 alert('To install:\n\niOS: Tap Share → Add to Home Screen\nAndroid: Tap Menu → Install app\nDesktop: Look for install icon in address bar');
                 return;
             }
@@ -780,7 +1300,6 @@
         // For iOS Safari and other browsers that don't support beforeinstallprompt
         // Show banner after a delay if conditions are met
         if (shouldShowBanner) {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             const isSupported = isIOS || /Android/.test(navigator.userAgent) || /Chrome/.test(navigator.userAgent);
 
             if (isSupported && !deferredPrompt) {
