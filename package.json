@@ -1,0 +1,20 @@
+{
+  "name": "veras-rps-battle",
+  "version": "1.0.0",
+  "description": "A brutalist Rock Paper Scissors game where the computer actually plays fair",
+  "main": "index.html",
+  "scripts": {
+    "test": "node test-game.js"
+  },
+  "keywords": [
+    "rock-paper-scissors",
+    "game",
+    "brutalist",
+    "web-game"
+  ],
+  "author": "Neel Ketkar",
+  "license": "MIT",
+  "devDependencies": {
+    "puppeteer": "^22.0.0"
+  }
+}
